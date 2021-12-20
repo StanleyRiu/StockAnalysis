@@ -1,6 +1,5 @@
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.HttpConnection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -8,22 +7,24 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class HtmlJsoupParser {
-    String StatementOfComprehensiveIncomeURL = "https://mops.twse.com.tw/mops/web/t163sb04";
-    String OperatingProfitMarginAnalysisURL = "https://mops.twse.com.tw/mops/web/t163sb06";
+    String Statement_of_Comprehensive_Income_url = "https://mops.twse.com.tw/mops/web/t163sb04";    //綜合損益表
+    String Statement_of_Financial_Position_url = "https://mops.twse.com.tw/mops/web/t163sb05";      //資產負債表
+    String Statement_of_Operating_Profit_url = "https://mops.twse.com.tw/mops/web/t163sb06";        //營益分析查詢彙總表
+
     public HtmlJsoupParser() {
     }
 
-    public void getStatementOfComprehensiveIncome(String year, String season) {
+    public void getStatementOfComprehensiveIncome(String year, String season, String type) {
         Connection.Response response = null;
         try {
-            response = Jsoup.connect(StatementOfComprehensiveIncomeURL)
+            response = Jsoup.connect(Statement_of_Comprehensive_Income_url)
                     .method(Connection.Method.POST)
                     .data("encodeURIComponent", "1")
                     .data("step", "1")
                     .data("firstin", "1")
                     .data("off", "1")
                     .data("isQuery", "Y")
-                    .data("TYPEK", "sii")
+                    .data("TYPEK", type)   //sii, otc
                     .data("year", year)
                     .data("season", season)
                     .execute();
@@ -44,17 +45,17 @@ public class HtmlJsoupParser {
         }
     }
 
-    public void getOperatingProfitMarginAnalysis(String year, String season) {
+    public void getStatementOfOperatingProfit(String year, String season, String type) {
         Connection.Response response = null;
         try {
-            response = Jsoup.connect(OperatingProfitMarginAnalysisURL)
+            response = Jsoup.connect(Statement_of_Operating_Profit_url)
                     .method(Connection.Method.POST)
                     .data("encodeURIComponent", "1")
                     .data("step", "1")
                     .data("firstin", "1")
                     .data("off", "1")
                     .data("isQuery", "Y")
-                    .data("TYPEK", "sii")
+                    .data("TYPEK", type)
                     .data("year", year)
                     .data("season", season)
                     .execute();

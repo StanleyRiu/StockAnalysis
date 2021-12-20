@@ -1,16 +1,29 @@
 import java.sql.*;
 
 public class SQLite {
-    public void createTable(String table) {
-        Connection connection = null;
+    String db_name = "stock.db";
+    String Statement_of_Comprehensive_Income;   //綜合損益表
+    String Statement_of_Financial_Position;     //資產負債表
+    String Statement_of_Cash_Flows;             //現金流量表
+    String Statement_of_Operating_Profit;       //營益分析查詢彙總表
+    Connection connection = null;
+
+    public SQLite() {
+        // create a database connection
         try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:stock.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:"+db_name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createTable(String table) {
+        try {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
             statement.executeUpdate("drop table if exists "+table);
-            statement.executeUpdate("create table person (id integer, name string)");
+            statement.executeUpdate("create table person (id string, name string)");
             statement.executeUpdate("insert into person values(1, 'leo')");
             statement.executeUpdate("insert into person values(2, 'yui')");
             ResultSet rs = statement.executeQuery("select * from person");
