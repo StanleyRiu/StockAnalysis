@@ -3,6 +3,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SQLite {
     String db_name = "stock.db";
@@ -36,7 +37,14 @@ public class SQLite {
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
             statement.executeUpdate("drop table if exists " + table);
-//            statement.executeUpdate("create table person (id string, name string)");
+//            statement.executeUpdate("create table " + table + " ("
+            System.out.println("create table " + table + " ("
+                    + Statement_of_Comprehensive_Income
+                    .entrySet()
+                    .stream()
+                    .map(e -> e.getKey()+" "+e.getValue())
+                    .collect(Collectors.joining(", "))
+                    + ")");
 //            statement.executeUpdate("insert into person values(1, 'leo')");
 //            statement.executeUpdate("insert into person values(2, 'yui')");
             ResultSet rs = statement.executeQuery("select * from "+table);
