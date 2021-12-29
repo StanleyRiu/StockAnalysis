@@ -1,8 +1,5 @@
 import java.sql.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SQLite {
@@ -20,6 +17,7 @@ public class SQLite {
     String Statement_of_Cash_Flows;             //現金流量表
     String Statement_of_Operating_Profit;       //營益分析查詢彙總表
     Connection connection = null;
+    Map<String, String> Comprehensive_Income = new HashMap<>();
 
     public SQLite() {
         // create a database connection
@@ -31,7 +29,15 @@ public class SQLite {
     }
 
     String generateCreateTableSQL(String tableSchema) {
-        String sql = "create table " + tableSchema.toString() + " ("
+        try {
+            System.out.println(Class.forName("Comprehensive_Income"));
+        } catch (ClassNotFoundException e) {
+//            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        String sql = null;
+        sql = "create table " + tableSchema.toString() + " ("
                 + Statement_of_Comprehensive_Income
                 .entrySet()
                 .stream()
