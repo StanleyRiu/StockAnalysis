@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class HtmlJsoupParser {
     String Statement_of_Comprehensive_Income_url = "https://mops.twse.com.tw/mops/web/t163sb04";    //綜合損益表
@@ -35,11 +36,19 @@ public class HtmlJsoupParser {
                 System.out.print(e.text().replace(" ", "")+" ");
             }
             System.out.println();
+
+            ArrayList<StatementOfComprehensiveIncome.Statement_of_Comprehensive_Income> al =
+                    new ArrayList<StatementOfComprehensiveIncome.Statement_of_Comprehensive_Income>();
+
             Elements companies = doc.select("tr.even, tr.odd");
             for (Element element : companies) {
                 Elements info = element.select("td:eq(0), td:eq(1), td:last-child");
                 System.out.println(info.text());
+                for (Element e : info) {
+                    e.
+                }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
