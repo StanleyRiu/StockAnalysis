@@ -5,8 +5,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class HtmlJsoupParser {
     String Statement_of_Comprehensive_Income_url = "https://mops.twse.com.tw/mops/web/t163sb04";    //綜合損益表
@@ -102,14 +105,30 @@ public class HtmlJsoupParser {
                 List<String> list = es.eachText();
                 soop.setId(list.get(0));
                 soop.setName(list.get(1));
-                soop.setGross_margin(Float.parseFloat(list.get(2)));
-                soop.setOperating_profit_Margin(Float.parseFloat(list.get(3)));
-                soop.setPre_Tax_Profit_Margin(Float.parseFloat(list.get(4)));
-                soop.setProfit_Margin(Float.parseFloat(list.get(5)));
+
+                NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+                Number number = null;
+                float f = 0;
+
+                number = format.parse(list.get(2));
+                f = number.floatValue();
+                soop.setGross_margin(f);
+
+                number = format.parse(list.get(3));
+                f = number.floatValue();
+                soop.setOperating_profit_Margin(f);
+
+                number = format.parse(list.get(4));
+                f = number.floatValue();
+                soop.setPre_Tax_Profit_Margin(f);
+
+                number = format.parse(list.get(5));
+                f = number.floatValue();
+                soop.setProfit_Margin(f);
 
                 al.add(soop);
             }
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
         return al;

@@ -3,6 +3,7 @@ import java.util.*;
 
 public class SQLite {
     String db_name = "stock_analysis.sqlite";
+
     Map<String, String> Statement_of_Financial_Position = Map.ofEntries(
 
     );  //資產負債表
@@ -11,6 +12,7 @@ public class SQLite {
     );  //現金流量表
 
     Map<String, Map<String, String>> MapOfStatements = null;
+
     Connection connection = null;
 
     public SQLite() {
