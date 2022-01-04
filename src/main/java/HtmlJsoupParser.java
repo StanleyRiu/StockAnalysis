@@ -5,6 +5,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -71,6 +73,7 @@ public class HtmlJsoupParser {
     public ArrayList<Statement_of_Operating_Profit> getStatementOfOperatingProfit(String year, String season, String type) {
         ArrayList<Statement_of_Operating_Profit> al = new ArrayList<Statement_of_Operating_Profit>();
         Connection.Response response = null;
+
         try {
             response = Jsoup.connect(Statement_of_Operating_Profit_url)
                     .method(Connection.Method.POST)
@@ -109,7 +112,14 @@ public class HtmlJsoupParser {
                 NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
                 Number number = null;
                 float f = 0;
-
+/*
+                DecimalFormat df = new DecimalFormat();
+                DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+                dfs.setDecimalSeparator('.');
+                dfs.setGroupingSeparator(',');
+                df.setDecimalFormatSymbols(dfs);
+                number = df.parse(list.get(2));
+*/
                 number = format.parse(list.get(2));
                 f = number.floatValue();
                 soop.setGross_margin(f);
@@ -128,8 +138,10 @@ public class HtmlJsoupParser {
 
                 al.add(soop);
             }
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+        } catch (ParseException e) {
+//           e.printStackTrace();
         }
         return al;
     }

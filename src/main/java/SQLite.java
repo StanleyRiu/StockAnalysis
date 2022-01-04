@@ -25,6 +25,9 @@ public class SQLite {
         }
     }
 
+    //SQLite is meant to be a lightweight database, and thus can't support a high level of concurrency.
+    //database is locked errors indicate that your application is experiencing more concurrency than sqlite can handle in default configuration.
+    //This error means that one thread or process has an exclusive lock on the database connection and another thread timed out waiting for the lock the be released.
     public void closeConnection() {
         try {
             if (connection != null)

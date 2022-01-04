@@ -119,7 +119,6 @@ public class StatementOfOperatingProfit extends SQLite {
                 soop.setProfit_Margin(rs.getFloat("Profit_Margin"));
                 al.add(soop);
             }
-            System.out.println(al.size());
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
