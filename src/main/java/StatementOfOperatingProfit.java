@@ -7,20 +7,23 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class StatementOfComprehensiveIncome extends SQLite {
-    final String TABLE_NAME = "Statement_of_Comprehensive_Income";
-    Map<String, String> Statement_of_Comprehensive_Income = Map.ofEntries(
+public class StatementOfOperatingProfit extends SQLite {
+    final String TABLE_NAME = "Statement_of_Operating_Profit";
+    Map<String, String> Statement_of_Operating_Profit = Map.ofEntries(
             Map.entry("year", "integer"),
             Map.entry("season", "integer"),
             Map.entry("type", "string"),    //sii, otc
             Map.entry("id", "string"),
             Map.entry("name", "string"),
-            Map.entry("eps", "float")
-    );  //綜合損益表
+            Map.entry("gross_margin", "float"),
+            Map.entry("Operating_profit_Margin", "float"),
+            Map.entry("Pre_Tax_Profit_Margin", "float"),
+            Map.entry("Profit_Margin", "float")
+    );  //營益分析查詢彙總表
 
-    public StatementOfComprehensiveIncome() {
+    public StatementOfOperatingProfit() {
         MapOfStatements = Map.ofEntries(
-            Map.entry("Statement_of_Comprehensive_Income", Statement_of_Comprehensive_Income)
+            Map.entry("Statement_of_Operating_Profit", Statement_of_Operating_Profit)
 //            Map.entry("Statement_of_Financial_Position", Statement_of_Financial_Position),
 //            Map.entry("Statement_of_Cash_Flows", Statement_of_Cash_Flows)
         );
@@ -58,22 +61,25 @@ public class StatementOfComprehensiveIncome extends SQLite {
         }
     }
 
-    public void insertIntoTable(ArrayList<Statement_of_Comprehensive_Income> al) {
-        Statement_of_Comprehensive_Income soci = null;
-        Iterator<Statement_of_Comprehensive_Income> it = null;
-        String sql = "insert into Statement_of_Comprehensive_Income(year, season, type, id, name, eps) values(?,?,?,?,?,?)";
+    public void insertIntoTable(ArrayList<Statement_of_Operating_Profit> al) {
+        Statement_of_Operating_Profit soop = null;
+        Iterator<Statement_of_Operating_Profit> it = null;
+        String sql = "insert into Statement_of_Operating_Profit(year, season, type, id, name, gross_margin, Operating_profit_Margin, Pre_Tax_Profit_Margin, Profit_Margin) values(?,?,?,?,?,?,?,?,?)";
         it = al.iterator();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
             while (it.hasNext()) {
-                soci = it.next();
-                preparedStatement.setInt(1, soci.getYear());
-                preparedStatement.setInt(2, soci.getSeason());
-                preparedStatement.setString(3, soci.getType());
-                preparedStatement.setString(4, soci.getId());
-                preparedStatement.setString(5, soci.getName());
-                preparedStatement.setFloat(6, soci.getEps());
+                soop = it.next();
+                preparedStatement.setInt(1, soop.getYear());
+                preparedStatement.setInt(2, soop.getSeason());
+                preparedStatement.setString(3, soop.getType());
+                preparedStatement.setString(4, soop.getId());
+                preparedStatement.setString(5, soop.getName());
+                preparedStatement.setFloat(6, soop.getGross_margin());
+                preparedStatement.setFloat(7, soop.getOperating_profit_Margin());
+                preparedStatement.setFloat(8, soop.getPre_Tax_Profit_Margin());
+                preparedStatement.setFloat(9, soop.getProfit_Margin());
                 preparedStatement.executeUpdate();
             }
             connection.commit();
@@ -88,11 +94,11 @@ public class StatementOfComprehensiveIncome extends SQLite {
         }
     }
 
-    ArrayList<Statement_of_Comprehensive_Income> queryTable(String sql) {
-        ArrayList<Statement_of_Comprehensive_Income> al = new ArrayList<Statement_of_Comprehensive_Income>();
-        String defaultSql = "select * from Statement_of_Comprehensive_Income";
+    ArrayList<Statement_of_Operating_Profit> queryTable(String sql) {
+        ArrayList<Statement_of_Operating_Profit> al = new ArrayList<Statement_of_Operating_Profit>();
+        String defaultSql = "select * from Statement_of_Operating_Profit";
         if (sql != null) defaultSql += " where " + sql;
-        Statement_of_Comprehensive_Income soci = null;
+        Statement_of_Operating_Profit soop = null;
         Statement statement = null;
         ResultSet rs = null;
         try {
@@ -101,14 +107,17 @@ public class StatementOfComprehensiveIncome extends SQLite {
 
             while (rs.next()) {
                 //read the result set
-                soci = new Statement_of_Comprehensive_Income();
-                soci.setYear(rs.getInt("year"));
-                soci.setSeason(rs.getInt("season"));
-                soci.setType(rs.getString("type"));
-                soci.setId(rs.getString("id"));
-                soci.setName(rs.getString("name"));
-                soci.setEps(rs.getFloat("eps"));
-                al.add(soci);
+                soop = new Statement_of_Operating_Profit();
+                soop.setYear(rs.getInt("year"));
+                soop.setSeason(rs.getInt("season"));
+                soop.setType(rs.getString("type"));
+                soop.setId(rs.getString("id"));
+                soop.setName(rs.getString("name"));
+                soop.setGross_margin(rs.getFloat("gross_margin"));
+                soop.setOperating_profit_Margin(rs.getFloat("Operating_profit_Margin"));
+                soop.setPre_Tax_Profit_Margin(rs.getFloat("Pre_Tax_Profit_Margin"));
+                soop.setProfit_Margin(rs.getFloat("Profit_Margin"));
+                al.add(soop);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,13 +133,16 @@ public class StatementOfComprehensiveIncome extends SQLite {
     }
 }
 
-class Statement_of_Comprehensive_Income {
+class Statement_of_Operating_Profit {
     int year;
     int season;
     String type;
     String id;
     String name;
-    float eps;
+    float gross_margin;
+    float Operating_profit_Margin;
+    float Pre_Tax_Profit_Margin;
+    float Profit_Margin;
 
     public int getYear() {
         return year;
@@ -172,15 +184,39 @@ class Statement_of_Comprehensive_Income {
         this.name = name;
     }
 
-    public float getEps() {
-        return eps;
+    public float getGross_margin() {
+        return gross_margin;
     }
 
-    public void setEps(float eps) {
-        this.eps = eps;
+    public void setGross_margin(float gross_margin) {
+        this.gross_margin = gross_margin;
+    }
+
+    public float getOperating_profit_Margin() {
+        return Operating_profit_Margin;
+    }
+
+    public void setOperating_profit_Margin(float operating_profit_Margin) {
+        Operating_profit_Margin = operating_profit_Margin;
+    }
+
+    public float getPre_Tax_Profit_Margin() {
+        return Pre_Tax_Profit_Margin;
+    }
+
+    public void setPre_Tax_Profit_Margin(float pre_Tax_Profit_Margin) {
+        Pre_Tax_Profit_Margin = pre_Tax_Profit_Margin;
+    }
+
+    public float getProfit_Margin() {
+        return Profit_Margin;
+    }
+
+    public void setProfit_Margin(float profit_Margin) {
+        Profit_Margin = profit_Margin;
     }
 
     public void println() {
-        System.out.println(getYear()+"\t"+getSeason()+"\t"+getType()+"\t"+getId()+"\t"+getName()+"\t"+getEps());
+        System.out.println(getYear()+"\t"+getSeason()+"\t"+getType()+"\t"+getId()+"\t"+getName()+"\t"+getGross_margin()+"\t"+getOperating_profit_Margin()+"\t"+getPre_Tax_Profit_Margin()+"\t"+getProfit_Margin());
     }
 }

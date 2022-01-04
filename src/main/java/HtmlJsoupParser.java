@@ -65,7 +65,8 @@ public class HtmlJsoupParser {
         return al;
     }
 
-    public void getStatementOfOperatingProfit(String year, String season, String type) {
+    public ArrayList<Statement_of_Operating_Profit> getStatementOfOperatingProfit(String year, String season, String type) {
+        ArrayList<Statement_of_Operating_Profit> al = new ArrayList<Statement_of_Operating_Profit>();
         Connection.Response response = null;
         try {
             response = Jsoup.connect(Statement_of_Operating_Profit_url)
@@ -80,19 +81,37 @@ public class HtmlJsoupParser {
                     .data("season", season)
                     .execute();
             Document doc = response.parse();
+            /*
             Element company = doc.select("tr.tblHead").first();
             Elements heads = company.select("td:not(td:eq(2))");
             for (Element e : heads) {
                 System.out.print(e.text().replace(" ", "")+" ");
             }
             System.out.println();
+             */
+            Statement_of_Operating_Profit soop = null;
             Elements companies = doc.select("tr.even, tr.odd");
             for (Element element : companies) {
-                Elements info = element.select("td:not(td:eq(2))");
-                System.out.println(info.text());
+                Elements es = element.select("td:not(td:eq(2))");
+
+                soop = new Statement_of_Operating_Profit();
+                soop.setYear(Integer.parseInt(year));
+                soop.setSeason(Integer.parseInt(season));
+                soop.setType(type);
+
+                List<String> list = es.eachText();
+                soop.setId(list.get(0));
+                soop.setName(list.get(1));
+                soop.setGross_margin(Float.parseFloat(list.get(2)));
+                soop.setOperating_profit_Margin(Float.parseFloat(list.get(3)));
+                soop.setPre_Tax_Profit_Margin(Float.parseFloat(list.get(4)));
+                soop.setProfit_Margin(Float.parseFloat(list.get(5)));
+
+                al.add(soop);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return al;
     }
 }
