@@ -28,9 +28,19 @@ public class SQLite {
         // create a database connection
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:"+db_name);
+            connection.setAutoCommit(false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public void closeConnection() {
+        try {
+            if (connection != null)
+                connection.close();
+        } catch (SQLException e) {
+            // connection close failed.
+            System.err.println(e.getMessage());
+        }
+    }
 }

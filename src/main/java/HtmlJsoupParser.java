@@ -6,6 +6,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HtmlJsoupParser {
     String Statement_of_Comprehensive_Income_url = "https://mops.twse.com.tw/mops/web/t163sb04";    //綜合損益表
@@ -15,8 +16,9 @@ public class HtmlJsoupParser {
     public HtmlJsoupParser() {
     }
 
-    public void getStatementOfComprehensiveIncome(String year, String season, String type) {
+    public ArrayList<Statement_of_Comprehensive_Income> getStatementOfComprehensiveIncome(String year, String season, String type) {
         Connection.Response response = null;
+        ArrayList<Statement_of_Comprehensive_Income> al = new ArrayList<Statement_of_Comprehensive_Income>();
         try {
             response = Jsoup.connect(Statement_of_Comprehensive_Income_url)
                     .method(Connection.Method.POST)
@@ -29,29 +31,38 @@ public class HtmlJsoupParser {
                     .data("year", year)
                     .data("season", season)
                     .execute();
+
             Document doc = response.parse();
+/*
             Element company = doc.select("tr.tblHead").first();
             Elements heads = company.select("th:eq(0), th:eq(1), th:last-child");
             for (Element e : heads) {
                 System.out.print(e.text().replace(" ", "")+" ");
             }
             System.out.println();
-
-            ArrayList<StatementOfComprehensiveIncome.Statement_of_Comprehensive_Income> al =
-                    new ArrayList<StatementOfComprehensiveIncome.Statement_of_Comprehensive_Income>();
-
+*/
+            Statement_of_Comprehensive_Income soci = null;
             Elements companies = doc.select("tr.even, tr.odd");
             for (Element element : companies) {
-                Elements info = element.select("td:eq(0), td:eq(1), td:last-child");
-                System.out.println(info.text());
-                for (Element e : info) {
-                    e.
-                }
-            }
+                Elements es = element.select("td:eq(0), td:eq(1), td:last-child");
 
+                soci = new Statement_of_Comprehensive_Income();
+
+                soci.setYear(Integer.parseInt(year));
+                soci.setSeason(Integer.parseInt(season));
+                soci.setType(type);
+
+                List<String> list = es.eachText();
+                soci.setId(list.get(0));
+                soci.setName(list.get(1));
+                soci.setEps(Float.parseFloat(list.get(2)));
+
+                al.add(soci);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return al;
     }
 
     public void getStatementOfOperatingProfit(String year, String season, String type) {
