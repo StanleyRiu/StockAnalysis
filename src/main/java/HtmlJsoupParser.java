@@ -15,8 +15,8 @@ import java.util.Locale;
 
 public class HtmlJsoupParser {
     String Statement_of_Comprehensive_Income_url = "https://mops.twse.com.tw/mops/web/t163sb04";    //綜合損益表
-    String Statement_of_Financial_Position_url = "https://mops.twse.com.tw/mops/web/t163sb05";      //資產負債表
     String Statement_of_Operating_Profit_url = "https://mops.twse.com.tw/mops/web/t163sb06";        //營益分析查詢彙總表
+//    String Statement_of_Financial_Position_url = "https://mops.twse.com.tw/mops/web/t163sb05";      //資產負債表
 
     public HtmlJsoupParser() {
     }
