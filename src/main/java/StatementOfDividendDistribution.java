@@ -11,10 +11,10 @@ public class StatementOfDividendDistribution extends SQLite {
     final String TABLE_NAME = "Statement_Of_Dividend_Distribution";
     Map<String, String> Statement_Of_Dividend_Distribution = Map.ofEntries(
             Map.entry("year", "integer"),
-            Map.entry("season", "integer"),
             Map.entry("type", "string"),    //sii, otc
             Map.entry("id", "string"),
             Map.entry("name", "string"),
+            Map.entry("dividend_year", "string"),
             Map.entry("gross_margin", "float"),
             Map.entry("Operating_profit_Margin", "float"),
             Map.entry("Pre_Tax_Profit_Margin", "float"),
@@ -96,7 +96,7 @@ public class StatementOfDividendDistribution extends SQLite {
         ArrayList<Statement_Of_Dividend_Distribution> al = new ArrayList<Statement_Of_Dividend_Distribution>();
         String defaultSql = "select * from Statement_Of_Dividend_Distribution";
         if (sql != null) defaultSql += " where " + sql;
-        Statement_of_Operating_Profit soop = null;
+        Statement_Of_Dividend_Distribution soop = null;
         Statement statement = null;
         ResultSet rs = null;
         try {

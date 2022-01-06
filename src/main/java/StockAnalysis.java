@@ -10,9 +10,15 @@ public class StockAnalysis {
 
     public static void main(String[] args) {
         StockAnalysis sa = new StockAnalysis();
-        sa.fetchData(110);
+//        sa.fetchData(110);
+        sa.test();
     }
-
+    void test() {
+        parser = new HtmlJsoupParser();
+        ArrayList<Statement_Of_Dividend_Distribution> al_soci = null;
+        al_soci = parser.getStatementOfDividendDistribution("110", "sii");
+        System.out.println(al_soci.size());
+    }
     void fetchData(int year) {
         parser = new HtmlJsoupParser();
 
@@ -21,6 +27,7 @@ public class StockAnalysis {
         SimpleDateFormat sdf = new SimpleDateFormat("Y");
 //        System.out.println(Integer.parseInt(sdf.format(date)) - 1911);
 
+        /**/
         StatementOfComprehensiveIncome soci = new StatementOfComprehensiveIncome();
         soci.createTable();
         ArrayList<Statement_of_Comprehensive_Income> al_soci = null;
@@ -35,6 +42,7 @@ public class StockAnalysis {
 //        al_soci.stream().forEach(x -> x.println());
         System.out.println(al_soci.size());
 
+        /**/
         StatementOfOperatingProfit soop = new StatementOfOperatingProfit();
         soop.createTable();
         ArrayList<Statement_of_Operating_Profit> al_soop = null;
@@ -48,5 +56,8 @@ public class StockAnalysis {
         soop.closeConnection(); //SQLite can't support a high level of concurrency.
 //        al_soop.stream().forEach(x -> x.println());
         System.out.println(al_soop.size());
+
+        /**/
+
     }
 }
